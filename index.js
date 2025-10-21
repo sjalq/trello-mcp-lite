@@ -464,7 +464,10 @@ const main = () => {
   });
 };
 
-main();
+// Only run main when executed directly, not when imported
+if (process.argv[1] === __filename) {
+  main();
+}
 
 // Export for testing
 export {

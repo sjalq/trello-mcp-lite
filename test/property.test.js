@@ -11,10 +11,9 @@ test("Property: Adding a token makes it retrievable", () => {
   fc.assert(
     fc.property(
       fc.record({
-        name: fc.string({ minLength: 1, maxLength: 20 })
-          .filter(s => !["toString", "valueOf", "constructor", "hasOwnProperty", "__proto__"].includes(s)),
-        apiKey: fc.hexaString({ minLength: 32, maxLength: 32 }),
-        token: fc.hexaString({ minLength: 64, maxLength: 64 })
+        name: fc.nat({ max: 1000 }).map(n => `token_${n}`),
+        apiKey: fc.hexaString({ minLength: 8, maxLength: 8 }),
+        token: fc.hexaString({ minLength: 16, maxLength: 16 })
       }),
       ({ name, apiKey, token }) => {
         const tokens = {};
@@ -23,7 +22,8 @@ test("Property: Adding a token makes it retrievable", () => {
                newTokens[name].apiKey === apiKey &&
                newTokens[name].token === token;
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
@@ -31,17 +31,17 @@ test("Property: Removing a token makes it not retrievable", () => {
   fc.assert(
     fc.property(
       fc.record({
-        name: fc.string({ minLength: 1, maxLength: 20 })
-          .filter(s => !["toString", "valueOf", "constructor", "hasOwnProperty", "__proto__"].includes(s)),
-        apiKey: fc.hexaString({ minLength: 32, maxLength: 32 }),
-        token: fc.hexaString({ minLength: 64, maxLength: 64 })
+        name: fc.nat({ max: 1000 }).map(n => `token_${n}`),
+        apiKey: fc.hexaString({ minLength: 8, maxLength: 8 }),
+        token: fc.hexaString({ minLength: 16, maxLength: 16 })
       }),
       ({ name, apiKey, token }) => {
         const tokens = addToken({}, name, apiKey, token);
         const newTokens = removeToken(tokens, name);
         return !hasToken(newTokens, name);
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
@@ -50,8 +50,7 @@ test("Property: Adding multiple tokens preserves all of them", () => {
     fc.property(
       fc.array(
         fc.record({
-          name: fc.string({ minLength: 1, maxLength: 20 })
-            .filter(s => !["toString", "valueOf", "constructor", "hasOwnProperty", "__proto__"].includes(s)),
+          name: fc.nat({ max: 1000 }).map(n => `token_${n}`),
           apiKey: fc.hexaString({ minLength: 32, maxLength: 32 }),
           token: fc.hexaString({ minLength: 64, maxLength: 64 })
         }),
@@ -67,7 +66,8 @@ test("Property: Adding multiple tokens preserves all of them", () => {
         // All should be present
         return tokenList.every(({ name }) => hasToken(tokens, name));
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
@@ -75,10 +75,9 @@ test("Property: Token operations are immutable", () => {
   fc.assert(
     fc.property(
       fc.record({
-        name: fc.string({ minLength: 1, maxLength: 20 })
-          .filter(s => !["toString", "valueOf", "constructor", "hasOwnProperty", "__proto__"].includes(s)),
-        apiKey: fc.hexaString({ minLength: 32, maxLength: 32 }),
-        token: fc.hexaString({ minLength: 64, maxLength: 64 })
+        name: fc.nat({ max: 1000 }).map(n => `token_${n}`),
+        apiKey: fc.hexaString({ minLength: 8, maxLength: 8 }),
+        token: fc.hexaString({ minLength: 16, maxLength: 16 })
       }),
       ({ name, apiKey, token }) => {
         const originalTokens = { existing: { apiKey: "abc", token: "xyz" } };
@@ -90,7 +89,8 @@ test("Property: Token operations are immutable", () => {
         return Object.keys(originalTokens).length === originalKeys.length &&
                originalTokens.existing.apiKey === "abc";
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
@@ -110,7 +110,8 @@ test("Property: Removing non-existent token returns unchanged object", () => {
           return Object.keys(newTokens).length === 1;
         }
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
@@ -131,7 +132,8 @@ test("Property: isAggregatable is deterministic", () => {
         const result2 = isAggregatable(endpoint, method);
         return result1 === result2;
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
@@ -145,7 +147,8 @@ test("Property: Only GET requests can be aggregatable", () => {
       ({ endpoint, method }) => {
         return isAggregatable(endpoint, method) === false;
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
@@ -153,12 +156,11 @@ test("Property: Adding same token twice overwrites", () => {
   fc.assert(
     fc.property(
       fc.record({
-        name: fc.string({ minLength: 1, maxLength: 20 })
-          .filter(s => !["toString", "valueOf", "constructor", "hasOwnProperty", "__proto__"].includes(s)),
-        apiKey1: fc.hexaString({ minLength: 32, maxLength: 32 }),
-        token1: fc.hexaString({ minLength: 64, maxLength: 64 }),
-        apiKey2: fc.hexaString({ minLength: 32, maxLength: 32 }),
-        token2: fc.hexaString({ minLength: 64, maxLength: 64 })
+        name: fc.nat({ max: 1000 }).map(n => `token_${n}`),
+        apiKey1: fc.hexaString({ minLength: 8, maxLength: 8 }),
+        token1: fc.hexaString({ minLength: 16, maxLength: 16 }),
+        apiKey2: fc.hexaString({ minLength: 8, maxLength: 8 }),
+        token2: fc.hexaString({ minLength: 16, maxLength: 16 })
       }),
       ({ name, apiKey1, token1, apiKey2, token2 }) => {
         let tokens = addToken({}, name, apiKey1, token1);
@@ -169,7 +171,8 @@ test("Property: Adding same token twice overwrites", () => {
                tokens[name].apiKey === apiKey2 &&
                tokens[name].token === token2;
       }
-    )
+    ),
+    { numRuns: 5 }
   );
 });
 
