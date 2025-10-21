@@ -465,7 +465,7 @@ const main = () => {
 };
 
 // Only run main when executed directly, not when imported
-if (process.argv[1] === __filename) {
+if (import.meta.url === `file://${process.argv[1]}` || process.argv[1].endsWith('index.js')) {
   main();
 }
 
