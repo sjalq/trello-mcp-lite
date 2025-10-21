@@ -464,8 +464,9 @@ const main = () => {
   });
 };
 
-// Only run main when executed directly, not when imported
-if (import.meta.url === `file://${process.argv[1]}` || process.argv[1].endsWith('index.js')) {
+// Run main() unless we're in test mode
+const isTestMode = process.execArgv.some(arg => arg.startsWith('--test'));
+if (!isTestMode) {
   main();
 }
 
