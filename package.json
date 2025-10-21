@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "bin": {
-    "trello-mcp-lite": "./index.js"
+    "trello-mcp-lite": "index.js"
   },
   "scripts": {
     "test": "node --test test/*.test.js"
@@ -23,7 +23,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sjalq/trello-mcp-lite.git"
+    "url": "git+https://github.com/sjalq/trello-mcp-lite.git"
   },
   "homepage": "https://github.com/sjalq/trello-mcp-lite#readme",
   "bugs": {
