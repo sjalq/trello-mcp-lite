@@ -1,6 +1,6 @@
 {
   "name": "@sjalq/trello-mcp-lite",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Minimal Trello MCP server with multi-account support and API passthrough - pure functional JS",
   "type": "module",
   "main": "index.js",
