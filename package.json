@@ -1,0 +1,47 @@
+{
+  "name": "@sjalq/trello-mcp-lite",
+  "version": "1.0.0",
+  "description": "Minimal Trello MCP server with multi-account support and API passthrough - pure functional JS",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "trello-mcp-lite": "./index.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "mcp",
+    "trello",
+    "model-context-protocol",
+    "claude",
+    "ai",
+    "task-management",
+    "multi-account"
+  ],
+  "author": "sjalq",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sjalq/trello-mcp-lite.git"
+  },
+  "homepage": "https://github.com/sjalq/trello-mcp-lite#readme",
+  "bugs": {
+    "url": "https://github.com/sjalq/trello-mcp-lite/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "fast-check": "^3.23.2"
+  }
+}
